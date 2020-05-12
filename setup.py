@@ -9,6 +9,7 @@ install_requires = [
     "requests",
     "mecache",
     "pillow",
+    "aiodns",
 ]
 
 extras_require = {
