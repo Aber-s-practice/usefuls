@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 import os
 import re
+import sys
 import socket
 from functools import wraps
 
@@ -41,12 +42,12 @@ def whois_server(suffix):
         "https://www.iana.org/domains/root/db/" + suffix + ".html", timeout=3
     )
     if resp.status_code == 404:
-        raise SuffixDontExists("此域名后缀不存在")
+        raise SuffixDontExists("This domain name suffix does not exist.")
 
     try:
         return re.search(r"WHOIS Server:</b>\s*(?P<whois>.*)", resp.text).group("whois")
     except AttributeError:
-        raise NoWhoisServer("未找到此域名的 Whois 服务器")
+        raise NoWhoisServer("Whois server for this domain name was not found.")
 
 
 def whois(server, domain):
@@ -72,7 +73,14 @@ def parse(whois_data):
 @click.command()
 @click.argument("domain", required=True)
 def main(domain: str = None):
-    data = parse(whois(whois_server(domain.split(".")[-1]), domain))
+    domain = punycode(domain)
+    try:
+        raw_data = whois(whois_server(domain.split(".")[-1]), domain)
+    except WhoisError as e:
+        click.secho("Error: " + str(e), fg="red")
+        sys.exit(1)
+
+    data = parse(raw_data)
     print(data)
 
 

@@ -35,8 +35,10 @@ def get_dns_info(dns_resp) -> Dict[str, str]:
     }
 
 
-async def query(domain: str, dns_type: str) -> List[Dict[str, str]]:
-    resolver = aiodns.DNSResolver()
+async def query(
+    domain: str, dns_type: str, nameservers: List[str] = None
+) -> List[Dict[str, str]]:
+    resolver = aiodns.DNSResolver(nameservers=nameservers)
     try:
         record = await resolver.query(domain, dns_type)
     except aiodns.error.DNSError as e:
@@ -68,26 +70,31 @@ def display_dns_info(data: List[Dict[str, str]], prefix: str = "") -> None:
 
 
 @click.command()
+@click.option("-NS", "--name-server", "nameservers", multiple=True, help="DNS Server")
 @click.argument("domain")
 @click.argument(
     "dns-type",
     type=click.Choice(DNS_TYPE + ["any"], case_sensitive=True),
     default="any",
 )
-def main(domain: str = None, dns_type: str = "any"):
-    print("----------> DNS INFO <----------")
+def main(domain: str = None, dns_type: str = "any", nameservers: List[str] = None):
+    click.secho(
+        f"Querying {domain} {dns_type} records"
+        + (f" from {nameservers}" if nameservers else ""),
+        fg="green",
+    )
     if dns_type == "any":
         results = loop.run_until_complete(
             asyncio.gather(
-                *[query(domain, _dns_type) for _dns_type in DNS_TYPE],
+                *[query(domain, _dns_type, nameservers) for _dns_type in DNS_TYPE],
                 return_exceptions=True,
             )
         )
         for index, _result in enumerate(results):
-            print("TYPE:", DNS_TYPE[index])
+            click.secho(f"TYPE: {DNS_TYPE[index]}", fg="blue")
             display_dns_info(_result, "   ")
     else:
-        display_dns_info(loop.run_until_complete(query(domain, dns_type)))
+        display_dns_info(loop.run_until_complete(query(domain, dns_type, nameservers)))
 
 
 if __name__ == "__main__":
