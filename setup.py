@@ -37,7 +37,7 @@ setup_kwargs = {
     "author_email": "me@abersheeran.com",
     "maintainer": None,
     "maintainer_email": None,
-    "url": "https://github.com/abersheeran/websocks",
+    "url": "https://github.com/abersheeran/usefuls",
     "packages": ["usefuls"],
     "package_data": {'': ['*']},
     "install_requires": install_requires,
