@@ -9,7 +9,5 @@ All script will be auto register by setup.py.
 It is strongly recommended to use [pipx](https://github.com/pipxproject/pipx) for installation to ensure a clean environment.
 
 ```bash
-git clone https://github.com/abersheeran/usefuls
-cd usefuls
-pipx install .
+pipx install git+https://github.com/abersheeran/usefuls
 ```
