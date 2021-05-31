@@ -19,8 +19,7 @@ if (
     and sys.version_info.minor >= 8
     and platform.system() == "Windows"
 ):
-    selector = selectors.SelectSelector()
-    loop = asyncio.SelectorEventLoop(selector)
+    loop = asyncio.SelectorEventLoop(selectors.SelectSelector())
 else:
     loop = asyncio.new_event_loop()
 
