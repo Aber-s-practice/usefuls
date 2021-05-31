@@ -1,4 +1,7 @@
 import asyncio
+import sys
+import platform
+import selectors
 from typing import Dict, List
 
 import click
@@ -11,7 +14,15 @@ try:
 except ImportError:
     pass
 
-loop = asyncio.get_event_loop()
+if (
+    sys.version_info.major >= 3
+    and sys.version_info.minor >= 8
+    and platform.system() == "Windows"
+):
+    selector = selectors.SelectSelector()
+    loop = asyncio.SelectorEventLoop(selector)
+else:
+    loop = asyncio.new_event_loop()
 
 DNS_TYPE = [
     "A",
