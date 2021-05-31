@@ -14,14 +14,7 @@ try:
 except ImportError:
     pass
 
-if (
-    sys.version_info.major >= 3
-    and sys.version_info.minor >= 8
-    and platform.system() == "Windows"
-):
-    loop = asyncio.SelectorEventLoop(selectors.SelectSelector())
-else:
-    loop = asyncio.new_event_loop()
+loop = asyncio.get_event_loop()
 
 DNS_TYPE = [
     "A",
@@ -46,9 +39,8 @@ def get_dns_info(dns_resp) -> Dict[str, str]:
 
 
 async def query(
-    domain: str, dns_type: str, nameservers: List[str] = None
+    resolver: aiodns.DNSResolver, domain: str, dns_type: str, nameservers: List[str] = None
 ) -> List[Dict[str, str]]:
-    resolver = aiodns.DNSResolver(nameservers=nameservers)
     try:
         record = await resolver.query(domain, dns_type)
     except aiodns.error.DNSError as e:
@@ -88,15 +80,12 @@ def display_dns_info(data: List[Dict[str, str]], prefix: str = "") -> None:
     default="any",
 )
 def main(domain: str = None, dns_type: str = "any", nameservers: List[str] = None):
-    click.secho(
-        f"Querying {domain} {dns_type} records"
-        + (f" from {nameservers}" if nameservers else ""),
-        fg="green",
-    )
+    resolver = aiodns.DNSResolver(nameservers=nameservers)
+    click.secho(f"Querying {domain} {dns_type} records, from {resolver.nameservers}", fg="green")
     if dns_type == "any":
         results = loop.run_until_complete(
             asyncio.gather(
-                *[query(domain, _dns_type, nameservers) for _dns_type in DNS_TYPE],
+                *[query(resolver, domain, _dns_type, nameservers) for _dns_type in DNS_TYPE],
                 return_exceptions=True,
             )
         )
@@ -104,7 +93,7 @@ def main(domain: str = None, dns_type: str = "any", nameservers: List[str] = Non
             click.secho(f"TYPE: {DNS_TYPE[index]}", fg="blue")
             display_dns_info(_result, "   ")
     else:
-        display_dns_info(loop.run_until_complete(query(domain, dns_type, nameservers)))
+        display_dns_info(loop.run_until_complete(query(resolver, domain, dns_type, nameservers)))
 
 
 if __name__ == "__main__":
