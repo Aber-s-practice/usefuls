@@ -1,14 +1,12 @@
 #!/usr/bin/python3
 import os
 import re
-import sys
 import socket
-from functools import wraps
+import sys
 
 import click
 import requests as req
 from mecache import File
-
 
 file = File(os.path.join(os.environ["HOME"], ".usefuls", "cache", "whois.cache"))
 
@@ -66,7 +64,7 @@ def whois(server, domain):
 
 def parse(whois_data):
     # TODO better parse
-    data = re.sub(">>>[\s\S]+", "", whois_data)
+    data = re.sub(r">>>[\s\S]+", "", whois_data)
     return data
 
 

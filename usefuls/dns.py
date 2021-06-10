@@ -1,11 +1,8 @@
 import asyncio
-import sys
-import platform
-import selectors
 from typing import Dict, List
 
-import click
 import aiodns
+import click
 
 try:
     import uvloop
@@ -38,9 +35,7 @@ def get_dns_info(dns_resp) -> Dict[str, str]:
     }
 
 
-async def query(
-    resolver: aiodns.DNSResolver, domain: str, dns_type: str, nameservers: List[str] = None
-) -> List[Dict[str, str]]:
+async def query(resolver: aiodns.DNSResolver, domain: str, dns_type: str) -> List[Dict[str, str]]:
     try:
         record = await resolver.query(domain, dns_type)
     except aiodns.error.DNSError as e:
@@ -85,7 +80,7 @@ def main(domain: str = None, dns_type: str = "any", nameservers: List[str] = Non
     if dns_type == "any":
         results = loop.run_until_complete(
             asyncio.gather(
-                *[query(resolver, domain, _dns_type, nameservers) for _dns_type in DNS_TYPE],
+                *[query(resolver, domain, _dns_type) for _dns_type in DNS_TYPE],
                 return_exceptions=True,
             )
         )
@@ -93,7 +88,7 @@ def main(domain: str = None, dns_type: str = "any", nameservers: List[str] = Non
             click.secho(f"TYPE: {DNS_TYPE[index]}", fg="blue")
             display_dns_info(_result, "   ")
     else:
-        display_dns_info(loop.run_until_complete(query(resolver, domain, dns_type, nameservers)))
+        display_dns_info(loop.run_until_complete(query(resolver, domain, dns_type)))
 
 
 if __name__ == "__main__":

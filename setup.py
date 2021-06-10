@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 import os
+
 from setuptools import setup
 
 here = os.path.dirname(os.path.abspath(__file__))
@@ -39,7 +40,7 @@ setup_kwargs = {
     "maintainer_email": None,
     "url": "https://github.com/abersheeran/usefuls",
     "packages": ["usefuls"],
-    "package_data": {'': ['*']},
+    "package_data": {"": ["*"]},
     "install_requires": install_requires,
     "extras_require": extras_require,
     "entry_points": entry_points,
