@@ -34,7 +34,7 @@ Options:
   --help                   Show this message and exit.
 ```
 
-### Whois
+### whois
 
 ```
 > py-whois --help
