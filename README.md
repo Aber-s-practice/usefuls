@@ -27,3 +27,41 @@ Options:
   -NS, --name-server TEXT  DNS Server
   --help                   Show this message and exit.
 ```
+
+### Whois
+
+```
+> py-whois --help
+Usage: py-whois [OPTIONS] DOMAIN     
+
+Options:
+  --help  Show this message and exit.
+```
+
+### Ping
+
+```
+> py-ping --help
+Usage: py-ping [OPTIONS] TARGET
+
+Options:
+  --timeout FLOAT                [default: 1.3]
+  --packet-size INTEGER          [default: 32] 
+  --interval FLOAT               [default: 0.5]
+  --max-number-of-times INTEGER  [default: 4]
+  --ipv4 / --ipv6                [default: ipv4]
+  --help                         Show this message and exit.
+```
+
+### tcping
+
+```
+Usage: py-tcping [OPTIONS] TARGET...
+
+Options:
+  --timeout FLOAT                [default: 1.3]
+  --interval FLOAT               [default: 0.5]
+  --max-number-of-times INTEGER  [default: 4]
+  --proxy TEXT
+  --help                         Show this message and exit.
+```
