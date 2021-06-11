@@ -12,6 +12,12 @@ It is strongly recommended to use [pipx](https://github.com/pipxproject/pipx) fo
 pipx install git+https://github.com/abersheeran/usefuls
 ```
 
+In China, you can also install from [Gitee](https://gitee.com/abersheeran/usefuls)
+
+```bash
+pipx install git+https://gitee.com/abersheeran/usefuls
+```
+
 ## Commands
 
 Commands always like `py-xxx`
