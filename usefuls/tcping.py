@@ -30,7 +30,7 @@ def set_proxy(ctx, param, value):
 @click.option("--max-number-of-times", type=int, default=4, show_default=True)
 @click.option("--proxy", expose_value=False, callback=set_proxy)
 def main(target: str, timeout: float, interval: float, max_number_of_times: int):
-    print(f"TCP connect to {target}:")
+    print(f"Testing TCP connect to {target}:")
     exit_code = 1  # exit code
     for _ in range(max_number_of_times):
         start_time = time.time()
