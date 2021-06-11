@@ -8,7 +8,7 @@ import click
 import requests as req
 from mecache import File
 
-file = File(os.path.join(os.environ["HOME"], ".usefuls", "cache", "whois.cache"))
+file = File(os.path.expanduser("~/.usefuls/cache/whois.cache"))
 
 
 class WhoisError(Exception):

@@ -9,8 +9,8 @@ install_requires = [
     "click",
     "requests",
     "mecache",
-    "pillow",
     "aiodns",
+    "pysocks",
 ]
 
 extras_require = {
@@ -23,16 +23,18 @@ entry_points = {
     "console_scripts": [
         f"py-{name[:-3].replace('_', '-')} = usefuls.{name[:-3]}:main"
         for name in os.listdir(os.path.join(here, "usefuls"))
-        if os.path.isfile(os.path.join(here, "usefuls", name))
-        and name.endswith(".py")
-        and name != "__init__.py"
+        if (
+            os.path.isfile(os.path.join(here, "usefuls", name))
+            and name.endswith(".py")
+            and name != "__init__.py"
+        )
     ]
 }
 
 setup_kwargs = {
     "name": "usefuls",
     "version": "0.0.0",
-    "description": "Some useful script",
+    "description": "Some useful scripts",
     "long_description": "",
     "author": "abersheeran",
     "author_email": "me@abersheeran.com",
