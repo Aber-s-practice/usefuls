@@ -1,0 +1,15 @@
+name: SyncMirror
+
+on: push
+
+jobs:
+  gitee:
+    runs-on: ubuntu-latest
+    steps:
+      - name: sync-gitee-mirror
+        uses: abersheeran/sync-gitee-mirror@v1-alpha
+        with:
+          repository: abersheeran/usefuls
+          username: ${{ secrets.GITEE_USERNAME }}
+          password: ${{ secrets.GITEE_PASSWORD }}
+  
