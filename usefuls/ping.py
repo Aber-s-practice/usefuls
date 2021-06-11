@@ -1,3 +1,4 @@
+import ipaddress
 import random
 import select
 import socket
@@ -5,7 +6,7 @@ import string
 import struct
 import sys
 import time
-from typing import Generator
+from typing import Generator, Union
 
 import click
 
@@ -24,7 +25,7 @@ def generate_chesksum(data: bytes) -> int:
 
 
 def ping(
-    dst_addr: str,
+    dst_address: Union[ipaddress.IPv4Address, ipaddress.IPv6Address],
     timeout: float = 1.3,
     packet_size: int = 32,
     interval: float = 0.5,
@@ -33,15 +34,16 @@ def ping(
     """
     ICMP ping
     """
-
     for i in range(max_number_of_times):
         payload_body = "".join(random.choices(string.ascii_lowercase, k=packet_size)).encode("ascii")
         checksum = generate_chesksum(struct.pack(">BBHHH32s", 8, 0, 0, 0, i + 1, payload_body))
         icmp_packet = struct.pack(">BBHHH32s", 8, 0, checksum, 0, i + 1, payload_body)
-
-        rawsocket = socket.socket(socket.AF_INET, socket.SOCK_RAW, socket.getprotobyname("icmp"))
+        if dst_address.version == 4:
+            rawsocket = socket.socket(socket.AF_INET, socket.SOCK_RAW, socket.IPPROTO_ICMP)
+        else:
+            rawsocket = socket.socket(socket.AF_INET6, socket.SOCK_RAW, socket.IPPROTO_ICMPV6)
         send_request_ping_time = time.time()
-        rawsocket.sendto(icmp_packet, (dst_addr, 80))
+        rawsocket.sendto(icmp_packet, (str(dst_address), 0))
         what_ready = select.select([rawsocket], [], [], timeout)
         if what_ready[0] == []:  # Timeout
             yield -1
@@ -64,10 +66,16 @@ def ping(
 @click.option("--packet-size", type=int, default=32, show_default=True)
 @click.option("--interval", type=float, default=0.5, show_default=True)
 @click.option("--max-number-of-times", type=int, default=4, show_default=True)
-def main(target: str, timeout: float, packet_size: int, interval: float, max_number_of_times: int):
+@click.option("--ipv4/--ipv6", "use_ipv4", type=bool, default=True, help="[default: ipv4]")
+def main(target: str, timeout: float, packet_size: int, interval: float, max_number_of_times: int, use_ipv4: bool):
     try:
-        dst_addr = socket.gethostbyname(target)
-    except socket.gaierror:
+        for family, *_, address in socket.getaddrinfo(target, 0):
+            if use_ipv4 and family == socket.AF_INET:
+                dst_addr = address[0]
+            elif not use_ipv4 and family == socket.AF_INET6:
+                dst_addr = address[0]
+        dst_addr = ipaddress.ip_address(dst_addr)
+    except (socket.gaierror, UnboundLocalError):
         click.secho(f"Ping request could not find host {target}. Please check the name and try again.", fg="red")
         sys.exit(1)
 
