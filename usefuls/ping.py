@@ -72,13 +72,16 @@ def main(target: str, timeout: float, packet_size: int, interval: float, max_num
         sys.exit(1)
 
     print(f"Pinging {target} [{dst_addr}] with {packet_size} bytes of data:")
+    exit_code = 1  # exit code
     for cast_time in ping(dst_addr, timeout=timeout, packet_size=packet_size, interval=interval, max_number_of_times=max_number_of_times):
         if cast_time == -1:
             click.secho("Ping timeout", fg="yellow")
         elif cast_time < 0:
             click.secho(f"ICMP type: {-cast_time}", fg="yellow")
         else:
+            exit_code = 0
             print(f"Reply from {dst_addr}: bytes={packet_size} time={cast_time}ms")
+    sys.exit(exit_code)
 
 
 if __name__ == "__main__":
