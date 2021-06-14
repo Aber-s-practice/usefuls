@@ -20,7 +20,7 @@ pipx install git+https://gitee.com/abersheeran/usefuls
 
 ## Commands
 
-Commands always like `py-xxx`
+Commands always like `py-xxx`. So, you can type `py-` and then use `Tab` to use autocomplete.
 
 ### DNS
 
