@@ -4,23 +4,36 @@ import time
 from urllib.parse import urlsplit
 
 import click
-import socks
 
+try:
+    import socks
+except ImportError:
+    def set_proxy(ctx, param, value):
+        if not value:
+            return
+        click.secho("You need install pysocks to use proxy.", fg="red")
+    
+    class PlaceholderError(Exception):
+        pass
 
-def set_proxy(ctx, param, value):
-    if not value:
-        return
-    split_result = urlsplit(value)
-    socks.set_default_proxy(
-        socks.PROXY_TYPES[split_result.scheme.upper()],
-        split_result.hostname,
-        split_result.port,
-        rdns=True,
-        username=split_result.username,
-        password=split_result.password,
-    )
-    socket.socket = socks.socksocket
-    click.secho(f"Set proxy: {split_result.geturl()}", fg="blue")
+    proxy_error = PlaceholderError
+else:
+    def set_proxy(ctx, param, value):
+        if not value:
+            return
+        split_result = urlsplit(value)
+        socks.set_default_proxy(
+            socks.PROXY_TYPES[split_result.scheme.upper()],
+            split_result.hostname,
+            split_result.port,
+            rdns=True,
+            username=split_result.username,
+            password=split_result.password,
+        )
+        socket.socket = socks.socksocket
+        click.secho(f"Set proxy: {split_result.geturl()}", fg="blue")
+
+    proxy_error = socks.ProxyError
 
 
 @click.command()
@@ -40,7 +53,7 @@ def main(target: str, timeout: float, interval: float, max_number_of_times: int)
             connection.connect(target)
         except socket.timeout:
             click.secho("Connect timeout", fg="yellow")
-        except socks.ProxyError as e:
+        except proxy_error as e:
             click.secho(f"Proxy error: {e}", fg="red")
         else:
             end_time = time.time()

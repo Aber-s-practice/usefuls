@@ -65,7 +65,7 @@ Options:
 
 ### tcping
 
-Need `pysocks`, run `pipx inject usefuls pysocks`.
+If you want to use tcping with HTTP/HTTPS/Socks proxy, need `pysocks`, run `pipx inject usefuls pysocks`.
 
 ```
 Usage: py-tcping [OPTIONS] TARGET...
