@@ -22,7 +22,9 @@ pipx install git+https://gitee.com/abersheeran/usefuls
 
 Commands always like `py-xxx`. So, you can type `py-` and then use `Tab` to use autocomplete.
 
-### DNS
+### dns
+
+Need `dnspython`, run `pipx inject usefuls dnspython`.
 
 ```
 > py-dns --help
@@ -36,15 +38,17 @@ Options:
 
 ### whois
 
+Need `requests` and `mecache`, run `pipx inject usefuls requests mecache`.
+
 ```
 > py-whois --help
-Usage: py-whois [OPTIONS] DOMAIN     
+Usage: py-whois [OPTIONS] DOMAIN
 
 Options:
   --help  Show this message and exit.
 ```
 
-### Ping
+### ping
 
 ```
 > py-ping --help
@@ -52,7 +56,7 @@ Usage: py-ping [OPTIONS] TARGET
 
 Options:
   --timeout FLOAT                [default: 1.3]
-  --packet-size INTEGER          [default: 32] 
+  --packet-size INTEGER          [default: 32]
   --interval FLOAT               [default: 0.5]
   --max-number-of-times INTEGER  [default: 4]
   --ipv4 / --ipv6                [default: ipv4]
@@ -60,6 +64,8 @@ Options:
 ```
 
 ### tcping
+
+If you want to use tcping with HTTP/HTTPS/Socks proxy, need `pysocks`, run `pipx inject usefuls pysocks`.
 
 ```
 Usage: py-tcping [OPTIONS] TARGET...

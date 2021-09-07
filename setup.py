@@ -7,16 +7,22 @@ here = os.path.dirname(os.path.abspath(__file__))
 
 install_requires = [
     "click",
-    "requests",
-    "mecache",
-    "dnspython>=2.2",
-    "pysocks",
 ]
 
 extras_require = {
     ':sys_platform != "win32" and sys_platform != "cygwin" and platform_python_implementation != "pypy"': [
-        "uvloop"
-    ]
+        "uvloop",
+    ],
+    "dns": [
+        "dnspython",
+    ],
+    "whois": [
+        "requests",
+        "mecache",
+    ],
+    "proxy": [
+        "pysocks",
+    ],
 }
 
 entry_points = {
