@@ -29,7 +29,7 @@ Need `dnspython`, run `pipx inject usefuls dnspython`.
 ```
 > py-dns --help
 Usage: py-dns [OPTIONS] DOMAIN
-              [[A|AAAA|CNAME|MX|NAPTR|NS|PTR|SOA|SRV|TXT|any]]
+              [[A|AAAA|CNAME|MX|NAPTR|NS|PTR|SOA|SRV|TXT|ALL]]
 
 Options:
   -NS, --name-server TEXT  DNS Server
@@ -65,7 +65,7 @@ Options:
 
 ### tcping
 
-If you want to use tcping with HTTP/HTTPS/Socks proxy, need `pysocks`, run `pipx inject usefuls pysocks`.
+Need `pysocks`, run `pipx inject usefuls pysocks`.
 
 ```
 Usage: py-tcping [OPTIONS] TARGET...
