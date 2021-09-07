@@ -9,7 +9,7 @@ install_requires = [
     "click",
     "requests",
     "mecache",
-    "aiodns",
+    "dnspython>=2.2",
     "pysocks",
 ]
 
