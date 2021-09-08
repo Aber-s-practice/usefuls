@@ -32,7 +32,7 @@ Usage: py-dns [OPTIONS] DOMAIN
               [[A|AAAA|CNAME|MX|NAPTR|NS|PTR|SOA|SRV|TXT|ALL]]
 
 Options:
-  -NS, --nameserver TEXT  DNS Server
+  -NS, --nameserver TEXT   DNS Server
   --help                   Show this message and exit.
 ```
 
