@@ -57,7 +57,7 @@ def main(domain: str = None, dns_type: str = "ALL", nameserver: str = None):
     click.secho(f"Querying {domain} {dns_types} records, from {nameserver}", fg="green")
 
     tasks = []
-    for _dns_type in DNS_TYPE:
+    for _dns_type in dns_types:
         task = asyncio.ensure_future(query(nameserver, domain, _dns_type))
         task.add_done_callback(lambda future: display_result(future.result()))
         tasks.append(task)
