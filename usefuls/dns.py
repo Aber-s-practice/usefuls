@@ -33,7 +33,7 @@ async def query(
 ) -> dns.message.Message:
     query = dns.message.make_query(domain, dns_type)
     if method == "udp":
-        func = dns.asyncquery.udp_with_fallback
+        func = dns.asyncquery.udp
     elif method == "tcp":
         func = dns.asyncquery.tcp
     elif method == "tls":
@@ -41,6 +41,7 @@ async def query(
     elif method == "https":
         func = dns.asyncquery.https
     result = await func(query, nameserver, timeout=timeout)
+    print(result)
     return result
 
 
