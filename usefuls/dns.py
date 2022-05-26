@@ -41,7 +41,6 @@ async def query(
     elif method == "https":
         func = dns.asyncquery.https
     result = await func(query, nameserver, timeout=timeout)
-    print(result)
     return result
 
 
